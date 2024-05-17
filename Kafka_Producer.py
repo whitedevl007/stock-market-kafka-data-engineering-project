@@ -1,20 +1,30 @@
+
 import pandas as pd
 from kafka import KafkaProducer
 from time import sleep
 from json import dumps
 import json
+from dotenv import load_dotenv
+import os
 
 
-producer = KafkaProducer(bootstrap_servers = ['13.202.25.54:9092'],
-                         value_serializer = lambda x:
-                         dumps(x).encode('utf-8'))
+load_dotenv()
 
-producer.send('demo_test', value = "{'name':'nizam'}")
+
+bootstrap_servers = os.getenv('KAFKA_BOOTSTRAP_SERVERS')
+kafka_topic = os.getenv('KAFKA_TOPIC')
+
+producer = KafkaProducer(
+    bootstrap_servers=[bootstrap_servers],
+    value_serializer=lambda x: dumps(x).encode('utf-8')
+)
+
+producer.send(kafka_topic, value={'name': 'nizam'})
 
 df = pd.read_csv("indexProcessed.csv")
-df.head()
+print(df.head()) 
 
 while True:
-
     dict_stock = df.sample(1).to_dict(orient="records")[0]
-    producer.send('demo_test', value = dict_stock)
+    producer.send(kafka_topic, value=dict_stock)
+
