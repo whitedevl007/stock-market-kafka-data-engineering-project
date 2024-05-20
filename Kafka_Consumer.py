@@ -3,6 +3,7 @@ from time import sleep
 from json import loads
 from dotenv import load_dotenv
 import os
+from s3fs import S3FileSystem
 
 
 load_dotenv()
@@ -17,5 +18,11 @@ consumer = KafkaConsumer(
     value_deserializer=lambda x: loads(x.decode('utf-8'))
 )
 
-for message in consumer:
-    print(message.value)
+# for message in consumer:
+#     print(message.value)
+
+s3 = S3FileSystem()
+
+for count, i in enumerate(consumer):
+    print(count)
+    print(i.value)
