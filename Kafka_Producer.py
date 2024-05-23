@@ -2,6 +2,7 @@
 import pandas as pd
 from kafka import KafkaProducer
 from time import sleep
+import time
 from json import dumps
 import json
 from dotenv import load_dotenv
@@ -27,4 +28,5 @@ print(df.head())
 while True:
     dict_stock = df.sample(1).to_dict(orient="records")[0]
     producer.send(kafka_topic, value=dict_stock)
+    sleep(1)
 

@@ -1,3 +1,4 @@
 kafka.pem
 command_kafka.txt
 .env
+mykafka.pem
